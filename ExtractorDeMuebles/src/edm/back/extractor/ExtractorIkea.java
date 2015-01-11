@@ -1,6 +1,7 @@
 package edm.back.extractor;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,5 +28,10 @@ public class ExtractorIkea extends Extractor{
 			  
 			}
 
+	}
+	
+	private ArrayList getListaDeColores (Document doc){
+		return null;
+		
 	}
 }
