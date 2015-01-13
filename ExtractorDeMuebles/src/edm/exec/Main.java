@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		Extractor extractor = new ExtractorIkea();
-		extractor.extract("http://www.ikea.com/us/en/catalog/products/10265146/#/10265146");
+		extractor.extract("http://www.ikea.com/us/en/catalog/products/10265146/");
 
 	}
 
