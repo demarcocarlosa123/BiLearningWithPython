@@ -19,15 +19,41 @@ public class ExtractorIkea extends Extractor{
 		
 		Document doc = Jsoup.connect(url).get();
 		this.extraerNombre(doc, unProducto);
-		String script = doc.data();
-		this.getListaDeColores(doc, unProducto, url);
-
-		
-
-
+		this.extraerImagenes(doc, unProducto);
 	}
 	
 	private void extraerImagenes(Document doc, Producto unProducto) {
+		String script = doc.data();
+		int color = 1; 
+		script = script.substring(script.indexOf("\"normal\":[\"") + 10);
+	    while (script != "-1") {
+			String linkImg = "\"," + script.substring(0, script.indexOf("],\"zoom\":")) ;
+			
+			String linkVista = linkImg.substring(linkImg.indexOf("\",\"") + 3);
+			int vista = 1; 
+			while (linkVista != "-1") {
+				String link = "www.ikea.com" + linkVista.substring(0, linkVista.indexOf(".JPG") + 4);
+				link = link.replace("S3", "S5");
+				unProducto.agregarImagen(color, vista, link);
+			
+				if (linkVista.indexOf("\",\"") == -1){
+					linkVista = "-1";
+				}else{
+					linkVista = linkVista.substring(linkVista.indexOf("\",\"") + 3);
+					vista ++;
+				}
+				
+			}
+			  
+			if(script.indexOf("\"normal\":[\"") == -1){
+				script = "-1";
+				unProducto.print();
+			}else{
+				script = script.substring(script.indexOf("\"normal\":[\"") + 10); 
+				color = color + 1;
+			}
+			  
+		}
 		
 		
 	}
