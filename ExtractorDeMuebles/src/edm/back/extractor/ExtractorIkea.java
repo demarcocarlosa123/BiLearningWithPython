@@ -27,7 +27,7 @@ public class ExtractorIkea extends Extractor{
 		this.extraerImagenes(doc, unProducto);
 		this.createDirectorio(unProducto.getLineaNombre());
 		this.printDirectorio();
-		unProducto.descargarInfo();
+		//unProducto.descargarInfo();
 	}
 	
 	private void printDirectorio() {
