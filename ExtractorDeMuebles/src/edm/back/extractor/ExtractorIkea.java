@@ -1,6 +1,11 @@
 package edm.back.extractor;
 
 import java.io.IOException;
+import java.nio.file.DirectoryIteratorException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
@@ -20,8 +25,31 @@ public class ExtractorIkea extends Extractor{
 		Document doc = Jsoup.connect(url).get();
 		this.extraerNombre(doc, unProducto);
 		this.extraerImagenes(doc, unProducto);
+		this.createDirectorio(unProducto.getLineaNombre());
+		this.printDirectorio();
+		unProducto.descargarInfo();
 	}
 	
+	private void printDirectorio() {
+		Path dir = Paths.get("C:/Dropbox/proyectos/Clever furniture/Muebles/imagenes");
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+		    for (Path file: stream) {
+		        System.out.println(file.getFileName());
+		    }
+		} catch (IOException | DirectoryIteratorException x) {
+		    // IOException can never be thrown by the iteration.
+		    // In this snippet, it can only be thrown by newDirectoryStream.
+		    System.err.println(x);
+		}
+		
+	}
+
+	private void createDirectorio(String nombreDirectorio) throws IOException {
+		Path dir = Paths.get("C:/Dropbox/proyectos/Clever furniture/Muebles/imagenes/" + nombreDirectorio);
+		Files.createDirectory(dir);
+		
+	}
+
 	private void extraerImagenes(Document doc, Producto unProducto) {
 		String script = doc.data();
 		int color = 1; 
@@ -32,7 +60,7 @@ public class ExtractorIkea extends Extractor{
 			String linkVista = linkImg.substring(linkImg.indexOf("\",\"") + 3);
 			int vista = 1; 
 			while (linkVista != "-1") {
-				String link = "www.ikea.com" + linkVista.substring(0, linkVista.indexOf(".JPG") + 4);
+				String link = "http://www.ikea.com" + linkVista.substring(0, linkVista.indexOf(".JPG") + 4);
 				link = link.replace("S3", "S5");
 				unProducto.agregarImagen(color, vista, link);
 			
@@ -47,7 +75,7 @@ public class ExtractorIkea extends Extractor{
 			  
 			if(script.indexOf("\"normal\":[\"") == -1){
 				script = "-1";
-				unProducto.print();
+
 			}else{
 				script = script.substring(script.indexOf("\"normal\":[\"") + 10); 
 				color = color + 1;
@@ -100,9 +128,21 @@ public class ExtractorIkea extends Extractor{
 	}
 	
 	private void extraerNombre (Document doc, Producto unProducto){
-		String title = doc.title();
-		System.out.println(title);
-		unProducto.setNombre(title);
+		String linea = "";
+		Elements nombreElements = doc.getElementsByClass("productName");
+		for (Element nombreElement : nombreElements) {
+			linea = nombreElement.text();
+			
+		}
+		
+		String tipoProducto="";
+		Elements productTypes = doc.getElementsByClass("productType");
+		for (Element productType : productTypes) {
+			tipoProducto = productType.text();
+			
+		}
+		unProducto.setNombre(tipoProducto);
+		unProducto.setLinea(linea);
 		
 	}
 }

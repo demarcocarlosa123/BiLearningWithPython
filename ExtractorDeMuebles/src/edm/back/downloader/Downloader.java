@@ -8,11 +8,11 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 public class Downloader {
-	public static void downloadImage(String url, String imgSrc) throws IOException {
+	public static void downloadImage(String url, String nombreArchivo) throws IOException {
         BufferedImage image = null;
         try {
         	
-            imgSrc = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+            String imgSrc = nombreArchivo + url.substring(url.lastIndexOf("/") + 1);
             System.out.println("Descargando...." +imgSrc );
             String imageFormat = null;
             imageFormat = imgSrc.substring(imgSrc.lastIndexOf(".") + 1);

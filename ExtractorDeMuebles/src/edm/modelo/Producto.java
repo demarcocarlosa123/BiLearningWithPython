@@ -1,10 +1,14 @@
 package edm.modelo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import edm.back.downloader.Downloader;
+
 public class Producto {
 	private String nombre;
+	private String linea;
 	private ArrayList<Imagen> imagenes = new ArrayList<Imagen>();
 	public ArrayList<Imagen> getImagen() {
 		return imagenes;
@@ -19,7 +23,7 @@ public class Producto {
 		this.nombre = nombre;
 	}
 	public void agregarImagen(int color, int vista, String link) {
-		Imagen nuevaImagen = new Imagen(color, vista, link);
+		Imagen nuevaImagen = new Imagen(color, vista, link, linea + "-" + nombre);
 		this.getImagen().add(nuevaImagen);
 		
 	}
@@ -34,6 +38,28 @@ public class Producto {
 		
 		
 	}
+	public void descargarInfo() throws IOException {
+		Iterator<Imagen> itImagenes = imagenes.iterator();
+		while (itImagenes.hasNext()) {
+			Imagen imagen = itImagenes.next();
+			Downloader.downloadImage(imagen.getUrl(), imagen.getNombre());		
+		}
+		System.out.println("Fin desgargas");
+		
+	}
+	public String getLinea() {
+		return linea;
+	}
+	public void setLinea(String linea) {
+		this.linea = linea;
+	}
+	public String getLineaNombre (){
+		String lineaNombre; 
+		lineaNombre = this.getLinea() + "-";
+		lineaNombre = lineaNombre + this.getNombre();
+		return lineaNombre;
+	}
+
 
 	
 }

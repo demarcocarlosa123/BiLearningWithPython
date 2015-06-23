@@ -4,10 +4,12 @@ public class Imagen {
 	private String url;
 	private int color;
 	private int vista;
-	public Imagen(int color2, int vista2, String link) {
+	private String title;
+	public Imagen(int color2, int vista2, String link, String nombre) {
 		url = link;
 		color = color2;
 		vista = vista2;
+		title = nombre;
 	}
 	public String getUrl() {
 		return url;
@@ -33,6 +35,18 @@ public class Imagen {
 		System.out.println(": " + url);
 		
 		
+	}
+	public String getNombre() {
+		String nombre = "Vista" + vista;
+		nombre = nombre + "Color" + color;
+		nombre = nombre + "-" + title; 
+		return nombre + "-";
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }
